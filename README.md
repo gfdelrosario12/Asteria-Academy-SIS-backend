@@ -38,14 +38,14 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
     - Notes:
         - None; still refer to previous note
 
-### June 22; 9:45 PM
-- Commit Message: Connected the backend with the database
+### June 22; 11:25 PM
+- Commit Message: Completed full initial setup
 - Background: Connected backend with database and tested the connection
 - Status:
     - Updates:
-        - Established all components
-        - Successfully connected backend with mysql database
-        - Tested the connection with postman (get mapping)
+        - All entities now have their own files on each folder
+        - Spring Boot successfully connected with the database
+        - Tested the connection with postman
     - Issues:
         - None so far
     - Notes:
