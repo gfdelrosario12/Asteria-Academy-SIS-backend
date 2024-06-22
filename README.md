@@ -14,3 +14,26 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
 
 
 ## Commit Documentation
+
+### June 22; 4:25 PM
+- Commit Message: Setup/initial commit 
+- Background: Initial files of the project
+- Status:
+    - Updates:
+        - Established Controller, Entity, Repository, Service packages
+    - Issues:
+        - Not yet tested with Postman
+    - Notes:
+        - There are three different user tables, Student and Faculty and Administrators
+
+### June 22; 5:15 PM
+- Commit Message: Added Administrator User and completed controller
+- Background: Created admin user(table) and completed initial controller endpoints
+- Status:
+    - Updates:
+        - Created class for administrator user to create a table in database
+        - Initially completed the three controllers (faculty, admin and student)
+    - Issues:
+        - Not yet tested with Postman
+    - Notes:
+        - None; still refer to previous note

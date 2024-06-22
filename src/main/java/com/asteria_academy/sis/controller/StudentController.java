@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/asteria-academy/admin")
+@RequestMapping("/asteria-academy/student")
 public class StudentController {
     @Autowired
     private UserService userService;
@@ -17,7 +17,7 @@ public class StudentController {
     @Autowired
     private ClassService classService;
 
-    @GetMapping("/students")
+    @GetMapping("/list")
     public Optional<Student> getAllUsers() {
         return userService.getAllUsers();
     }
