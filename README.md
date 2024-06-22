@@ -27,7 +27,7 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - There are three different user tables, Student and Faculty and Administrators
 
 ### June 22; 5:15 PM
-- Commit Message: Added Administrator User and completed controller
+- Commit Message: Added Administrator User and initially completed controllers
 - Background: Created admin user(table) and completed initial controller endpoints
 - Status:
     - Updates:
@@ -37,3 +37,16 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Not yet tested with Postman
     - Notes:
         - None; still refer to previous note
+
+### June 22; 9:45 PM
+- Commit Message: Connected the backend with the database
+- Background: Connected backend with database and tested the connection
+- Status:
+    - Updates:
+        - Established all components
+        - Successfully connected backend with mysql database
+        - Tested the connection with postman (get mapping)
+    - Issues:
+        - None so far
+    - Notes:
+        - None so far

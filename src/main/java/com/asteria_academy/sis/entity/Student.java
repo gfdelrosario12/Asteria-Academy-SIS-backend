@@ -24,7 +24,11 @@ public class Student {
             joinColumns = @JoinColumn(name = "student_id"),
             inverseJoinColumns = @JoinColumn(name = "class_id")
     )
-    private Set<Class> classes;
+    private Set<Subject> subjects;
+
+    @OneToOne
+    @JoinColumn(name = "grade_id")
+    private Grade grade;
 
     // Getters and setters
     public String getUser_id() {
@@ -99,11 +103,11 @@ public class Student {
         this.role = role;
     }
 
-    public Set<Class> getClasses() {
-        return classes;
+    public Set<Subject> getClasses() {
+        return subjects;
     }
 
-    public void setClasses(Set<Class> classes) {
-        this.classes = classes;
+    public void setClasses(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 }

@@ -14,9 +14,6 @@ public class FacultyController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ClassService classService;
-
     @GetMapping("/list")
     public Optional<Student> getAllUsers() {
         return userService.getAllUsers();

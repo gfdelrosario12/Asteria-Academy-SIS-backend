@@ -13,7 +13,7 @@ public class Faculty {
     private String department;
 
     @OneToMany(mappedBy = "faculty")
-    private Set<Class> classes;
+    private Set<Subject> subjects;
 
     // Getters and setters
     public String getFaculty_id() {
@@ -40,11 +40,11 @@ public class Faculty {
         this.department = department;
     }
 
-    public Set<Class> getClasses() {
-        return classes;
+    public Set<Subject> getClasses() {
+        return subjects;
     }
 
-    public void setClasses(Set<Class> classes) {
-        this.classes = classes;
+    public void setClasses(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 }

@@ -14,10 +14,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ClassService classService;
-
-    @GetMapping("/list")
+    @GetMapping("/list/students")
     public Optional<Student> getAllUsers() {
         return userService.getAllUsers();
     }

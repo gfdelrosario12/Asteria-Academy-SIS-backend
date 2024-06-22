@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "class_subject")
-public class Class {
+@Table(name = "subject")
+public class Subject {
     @Id
     private String subject_id;
 
-    private String student_name;
+    private String student_names;
     private int school_year;
     private int year_level;
     private int semester;
@@ -21,7 +21,7 @@ public class Class {
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
 
-    @ManyToMany(mappedBy = "classes")
+    @ManyToMany(mappedBy = "subjects")
     private Set<Student> students;
 
     // Getters and setters
@@ -33,12 +33,12 @@ public class Class {
         this.subject_id = subject_id;
     }
 
-    public String getStudent_name() {
-        return student_name;
+    public String getStudent_names() {
+        return student_names;
     }
 
-    public void setStudent_name(String student_name) {
-        this.student_name = student_name;
+    public void setStudent_names(String student_name) {
+        this.student_names = student_name;
     }
 
     public int getSchool_year() {
