@@ -1,11 +1,7 @@
 package com.asteria_academy.sis.controller;
 
 import com.asteria_academy.sis.entity.Administrator;
-import com.asteria_academy.sis.entity.Grade;
-import com.asteria_academy.sis.entity.Subject;
 import com.asteria_academy.sis.service.AdministratorService;
-import com.asteria_academy.sis.service.GradesService;
-import com.asteria_academy.sis.service.SubjectsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,35 +26,51 @@ public class AdminController {
 
     // Endpoint to retrieve all administrators
     @GetMapping("/all")
-    public ResponseEntity<Administrator> getAllAdmins() {
-        Optional<Administrator> administrators = administratorService.getAllAdmins();
-        return administrators.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<Administrator>> getAllAdmins() {
+        List<Administrator> administrators = administratorService.getAllAdmins();
+        if (administrators.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(administrators);
+        }
     }
 
-    // Endpoint to retrieve an administrator by user_id
+    // Endpoint to retrieve an administrator by admin_id
     @GetMapping("/{admin_id}")
-    public ResponseEntity<Administrator> getAdministratorById(@PathVariable String userId) {
-        Optional<Administrator> administrator = administratorService.getAdministratorById(userId);
+    public ResponseEntity<Administrator> getAdministratorById(@PathVariable Long admin_id) {
+        Optional<Administrator> administrator = administratorService.getAdministratorById(admin_id);
         return administrator.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Endpoint to update an existing administrator
     @PutMapping("/{admin_id}")
-    public ResponseEntity<Administrator> updateAdministrator(@PathVariable String userId,
-                                                             @RequestBody Administrator administrator) {
-        if (!userId.equals(administrator.getAdmin_id())) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Administrator> updateAdministrator(@PathVariable Long admin_id,
+                                                             @RequestBody Administrator updatedAdmin) {
+        Optional<Administrator> existingAdminOpt = administratorService.getAdministratorById(admin_id);
+
+        if (existingAdminOpt.isPresent()) {
+            Administrator existingAdmin = existingAdminOpt.get();
+            existingAdmin.setEmail(updatedAdmin.getEmail());
+            existingAdmin.setHash(updatedAdmin.getHash());
+            existingAdmin.setSalt(updatedAdmin.getSalt());
+            existingAdmin.setFull_name(updatedAdmin.getFull_name());
+            existingAdmin.setAddress(updatedAdmin.getAddress());
+            existingAdmin.setGender(updatedAdmin.getGender());
+            existingAdmin.setMobile_number(updatedAdmin.getMobile_number());
+            existingAdmin.setRole(updatedAdmin.getRole());
+
+            Administrator updatedAdministrator = administratorService.updateAdministrator(existingAdmin);
+            return ResponseEntity.ok(updatedAdministrator);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        Administrator updatedAdministrator = administratorService.updateAdministrator(administrator);
-        return ResponseEntity.ok(updatedAdministrator);
     }
 
-    // Endpoint to delete an administrator by user_id
+    // Endpoint to delete an administrator by admin_id
     @DeleteMapping("/{admin_id}")
-    public ResponseEntity<Void> deleteAdministrator(@PathVariable String userId) {
-        administratorService.deleteAdministrator(userId);
+    public ResponseEntity<Void> deleteAdministrator(@PathVariable Long admin_id) {
+        administratorService.deleteAdministrator(admin_id);
         return ResponseEntity.noContent().build();
     }
 }

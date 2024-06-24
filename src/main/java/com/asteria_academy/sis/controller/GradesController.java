@@ -1,60 +1,60 @@
 package com.asteria_academy.sis.controller;
 
-import com.asteria_academy.sis.entity.Administrator;
 import com.asteria_academy.sis.entity.Grade;
-import com.asteria_academy.sis.service.AdministratorService;
 import com.asteria_academy.sis.service.GradesService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/asteria-academy/grades")
 public class GradesController {
+
     @Autowired
-    private GradesService gradesService;
+    private GradesService gradeService;
 
-    // Endpoint to create a new administrator
-    @PostMapping("/grades")
-    public ResponseEntity<Grade> createGrade(@RequestBody Grade grade) {
-        Grade createdGrade = gradesService.createGrade(grade);
-        return new ResponseEntity<>(createdGrade, HttpStatus.CREATED);
+    @GetMapping("/{id}")
+    public ResponseEntity<Grade> getGradeById(@PathVariable String id) {
+        Optional<Grade> grade = gradeService.getGradeById(id);
+        return grade.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Endpoint to retrieve all grades
-    @GetMapping("/grades")
-    public ResponseEntity<List<Grade>> getAllGrades() {
-        List<Grade> gradeList = gradesService.getAllGrades();
-        return new ResponseEntity<>(gradeList, HttpStatus.OK);
-    }
+    // Update a grade
+    @PutMapping("/{id}")
+    public ResponseEntity<Grade> updateGrade(@PathVariable String id, @RequestBody Grade updatedGrade) {
+        Optional<Grade> existingGradeOptional = gradeService.getGradeById(id);
 
-    // Endpoint to retrieve a grade by grade_id
-    @GetMapping("/grades/{gradeId}")
-    public ResponseEntity<Grade> getGradeById(@PathVariable String gradeId) {
-        Optional<Grade> grade = gradesService.getGradeById(gradeId);
-        return grade.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint to update an existing grade
-    @PutMapping("/grades/{gradeId}")
-    public ResponseEntity<Grade> updateGrade(@PathVariable String gradeId,
-                                             @RequestBody Grade grade) {
-        if (!gradeId.equals(grade.getGrade_id())) {
-            return ResponseEntity.badRequest().build();
+        if (existingGradeOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        Grade updatedGrade = gradesService.updateGrade(grade);
-        return ResponseEntity.ok(updatedGrade);
+
+        Grade existingGrade = existingGradeOptional.get();
+
+        // Update properties from updatedGrade
+        existingGrade.setSchool_year(updatedGrade.getSchool_year());
+        existingGrade.setYear_level(updatedGrade.getYear_level());
+        existingGrade.setSemester(updatedGrade.getSemester());
+        existingGrade.setProgram(updatedGrade.getProgram());
+        existingGrade.setSubject1(updatedGrade.getSubject1());
+        existingGrade.setSubject2(updatedGrade.getSubject2());
+        existingGrade.setSubject3(updatedGrade.getSubject3());
+        existingGrade.setSubject4(updatedGrade.getSubject4());
+        existingGrade.setSubject5(updatedGrade.getSubject5());
+        existingGrade.setSubject6(updatedGrade.getSubject6());
+        existingGrade.setSubject7(updatedGrade.getSubject7());
+        existingGrade.setSubject8(updatedGrade.getSubject8());
+        existingGrade.setSubject9(updatedGrade.getSubject9());
+
+        // Save the updated grade
+        Grade savedGrade = gradeService.saveGrade(existingGrade);
+        return ResponseEntity.ok(savedGrade);
     }
 
-    // Endpoint to delete a grade by grade_id
-    @DeleteMapping("/grades/{gradeId}")
-    public ResponseEntity<Void> deleteGrade(@PathVariable String gradeId) {
-        gradesService.deleteGrade(gradeId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGrade(@PathVariable String id) {
+        gradeService.deleteGrade(id);
         return ResponseEntity.noContent().build();
     }
 }

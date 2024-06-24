@@ -50,3 +50,15 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - None so far
     - Notes:
         - None so far
+
+### June 25; 12:21 AM
+- Commit Message: Completed all files
+- Background: Completed all files but most have not been tested
+- Status:
+    - Updates:
+        - Completed all layers of admin, faculty, student, classes, grades
+        - Tested all operations of admin
+    - Issues:
+        - Faculty, student, classes, grades have not been tested
+    - Notes:
+        - None so far

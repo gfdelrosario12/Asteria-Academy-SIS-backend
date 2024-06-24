@@ -17,51 +17,35 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    // Endpoint to create a new student
+    @GetMapping("/all")
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable String id) {
+        Optional<Student> student = studentService.getStudentById(id);
+        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.createStudent(student);
-        return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
+        Student createdStudent = studentService.saveStudent(student);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdStudent);
     }
 
-    // Endpoint to retrieve all students
-    @GetMapping("/")
-    public ResponseEntity<List<Student>> getAllStudents() {
-        List<Student> studentList = studentService.getAllStudents();
-        return new ResponseEntity<>(studentList, HttpStatus.OK);
-    }
-
-    // Endpoint to retrieve a student by user_id
-    @GetMapping("/{userId}")
-    public ResponseEntity<Student> getStudentById(@PathVariable String userId) {
-        Optional<Student> student = studentService.getStudentById(userId);
-        return student.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint to retrieve all students using custom query
-    @GetMapping("/all")
-    public ResponseEntity<Student> getAllStudentsCustomQuery() {
-        Optional<Student> studentList = studentService.getAllStudentsCustomQuery();
-        return studentList.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint to update an existing student
-    @PutMapping("/{userId}")
-    public ResponseEntity<Student> updateStudent(@PathVariable String userId,
-                                                 @RequestBody Student student) {
-        if (!userId.equals(student.getUser_id())) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable String id, @RequestBody Student student) {
+        if (!id.equals(student.getUser_id())) {
             return ResponseEntity.badRequest().build();
         }
-        Student updatedStudent = studentService.updateStudent(student);
+        Student updatedStudent = studentService.saveStudent(student);
         return ResponseEntity.ok(updatedStudent);
     }
 
-    // Endpoint to delete a student by user_id
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable String userId) {
-        studentService.deleteStudent(userId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
+        studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
 }

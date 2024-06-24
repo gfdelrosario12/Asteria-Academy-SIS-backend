@@ -14,25 +14,19 @@ public class SubjectsService {
     @Autowired
     private SubjectsRepository subjectsRepository;
 
-    public Subject createSubject(Subject subject) {
-        // Implement any additional business logic if needed
-        return subjectsRepository.save(subject);
-    }
-
     public List<Subject> getAllSubjects() {
         return subjectsRepository.findAll();
     }
 
-    public Optional<Subject> getSubjectById(Long subject_id) {
-        return subjectsRepository.findById(subject_id);
+    public Optional<Subject> getSubjectById(String id) {
+        return subjectsRepository.findById(id);
     }
 
-    public Subject updateSubject(Subject subject) {
-        // Implement update logic, ensuring subject_id exists
+    public Subject saveSubject(Subject subject) {
         return subjectsRepository.save(subject);
     }
 
-    public void deleteSubject(Long subject_id) {
-        subjectsRepository.deleteById(subject_id);
+    public void deleteSubject(String id) {
+        subjectsRepository.deleteById(id);
     }
 }

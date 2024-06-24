@@ -1,7 +1,6 @@
 package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "administrator")

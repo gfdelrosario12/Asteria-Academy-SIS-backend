@@ -17,51 +17,35 @@ public class FacultyController {
     @Autowired
     private FacultyService facultyService;
 
-    // Endpoint to create a new faculty member
+    @GetMapping("/all")
+    public List<Faculty> getAllFaculties() {
+        return facultyService.getAllFaculties();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable String id) {
+        Optional<Faculty> faculty = facultyService.getFacultyById(id);
+        return faculty.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/")
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
-        Faculty createdFaculty = facultyService.createFaculty(faculty);
-        return new ResponseEntity<>(createdFaculty, HttpStatus.CREATED);
+        Faculty createdFaculty = facultyService.saveFaculty(faculty);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdFaculty);
     }
 
-    // Endpoint to retrieve all faculty members
-    @GetMapping("/")
-    public ResponseEntity<List<Faculty>> getAllFaculty() {
-        List<Faculty> facultyList = facultyService.getAllFaculty();
-        return new ResponseEntity<>(facultyList, HttpStatus.OK);
-    }
-
-    // Endpoint to retrieve a faculty member by faculty_id
-    @GetMapping("/{facultyId}")
-    public ResponseEntity<Faculty> getFacultyById(@PathVariable String facultyId) {
-        Optional<Faculty> faculty = facultyService.getFacultyById(facultyId);
-        return faculty.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint to retrieve all faculty members using custom query
-    @GetMapping("/all")
-    public ResponseEntity<Faculty> getAllFacultyCustomQuery() {
-        Optional<Faculty> facultyList = facultyService.getAllFacultyCustomQuery();
-        return facultyList.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Endpoint to update an existing faculty member
-    @PutMapping("/{facultyId}")
-    public ResponseEntity<Faculty> updateFaculty(@PathVariable String facultyId,
-                                                 @RequestBody Faculty faculty) {
-        if (!facultyId.equals(faculty.getFaculty_id())) {
+    @PutMapping("/{id}")
+    public ResponseEntity<Faculty> updateFaculty(@PathVariable String id, @RequestBody Faculty faculty) {
+        if (!id.equals(faculty.getFaculty_id())) {
             return ResponseEntity.badRequest().build();
         }
-        Faculty updatedFaculty = facultyService.updateFaculty(faculty);
+        Faculty updatedFaculty = facultyService.saveFaculty(faculty);
         return ResponseEntity.ok(updatedFaculty);
     }
 
-    // Endpoint to delete a faculty member by faculty_id
-    @DeleteMapping("/{facultyId}")
-    public ResponseEntity<Void> deleteFaculty(@PathVariable String facultyId) {
-        facultyService.deleteFaculty(facultyId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFaculty(@PathVariable String id) {
+        facultyService.deleteFaculty(id);
         return ResponseEntity.noContent().build();
     }
 }
