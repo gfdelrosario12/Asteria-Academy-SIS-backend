@@ -6,9 +6,10 @@ import java.util.Set;
 @Entity
 @Table(name = "student")
 public class Student {
-    @Id
-    private String user_id;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String email;
     private String hash;
     private String salt;
@@ -18,25 +19,12 @@ public class Student {
     private int mobile_number;
     private String role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_class",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "class_id")
-    )
-    private Set<Subject> subjects;
-
-    @OneToOne
-    @JoinColumn(name = "grade_id")
-    private Grade grade;
-
-    // Getters and setters
-    public String getUser_id() {
-        return user_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -101,13 +89,5 @@ public class Student {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Set<Subject> getClasses() {
-        return subjects;
-    }
-
-    public void setClasses(Set<Subject> subjects) {
-        this.subjects = subjects;
     }
 }

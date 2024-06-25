@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "administrator")
 public class Administrator {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "admin_id")
-    private Long admin_id;
+    private Long id;
+
     private String email;
     private String hash;
     private String salt;
@@ -18,12 +19,12 @@ public class Administrator {
     private int mobile_number;
     private String role;
 
-    public Long getAdmin_id() {
-        return admin_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setAdmin_id(Long admin_id) {
-        this.admin_id = admin_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {

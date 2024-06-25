@@ -1,44 +1,41 @@
 package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "subject")
-public class Subject {
-    @Id
-    private String subject_id;
+@Table(name = "class_subject")
+public class Class_Subject {
 
-    private String student_names;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String className;
     private int school_year;
     private int year_level;
     private int semester;
     private String program;
     private int block;
-    private double subject_grade;
 
     @ManyToOne
-    @JoinColumn(name = "faculty_id")
+    @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
 
-    @ManyToMany(mappedBy = "subjects")
-    private Set<Student> students;
-
-    // Getters and setters
-    public String getSubject_id() {
-        return subject_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setSubject_id(String subject_id) {
-        this.subject_id = subject_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getStudent_names() {
-        return student_names;
+    public String getClassName() {
+        return className;
     }
 
-    public void setStudent_names(String student_name) {
-        this.student_names = student_name;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public int getSchool_year() {
@@ -81,27 +78,11 @@ public class Subject {
         this.block = block;
     }
 
-    public double getSubject_grade() {
-        return subject_grade;
-    }
-
-    public void setSubject_grade(double subject_grade) {
-        this.subject_grade = subject_grade;
-    }
-
     public Faculty getFaculty() {
         return faculty;
     }
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
     }
 }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class FacultyService {
-
     @Autowired
     private FacultyRepository facultyRepository;
 
@@ -18,7 +18,7 @@ public class FacultyService {
         return facultyRepository.findAll();
     }
 
-    public Optional<Faculty> getFacultyById(String id) {
+    public Optional<Faculty> getFacultyById(Long id) {
         return facultyRepository.findById(id);
     }
 
@@ -26,7 +26,11 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    public void deleteFaculty(String id) {
+    public Faculty updateFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
+    }
+
+    public void deleteFaculty(Long id) {
         facultyRepository.deleteById(id);
     }
 }

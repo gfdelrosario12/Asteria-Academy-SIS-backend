@@ -8,44 +8,47 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/asteria-academy/faculty")
+@RequestMapping("/faculty")
 public class FacultyController {
-
     @Autowired
     private FacultyService facultyService;
 
-    @GetMapping("/all")
-    public List<Faculty> getAllFaculties() {
-        return facultyService.getAllFaculties();
+    @GetMapping("/")
+    public ResponseEntity<List<Faculty>> getAllFaculties() {
+        return new ResponseEntity<>(facultyService.getAllFaculties(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Faculty> getFacultyById(@PathVariable String id) {
-        Optional<Faculty> faculty = facultyService.getFacultyById(id);
-        return faculty.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+        return new ResponseEntity<>(facultyService.getFacultyById(id).orElse(null), HttpStatus.OK);
     }
 
     @PostMapping("/")
     public ResponseEntity<Faculty> createFaculty(@RequestBody Faculty faculty) {
-        Faculty createdFaculty = facultyService.saveFaculty(faculty);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFaculty);
+        return new ResponseEntity<>(facultyService.saveFaculty(faculty), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Faculty> updateFaculty(@PathVariable String id, @RequestBody Faculty faculty) {
-        if (!id.equals(faculty.getFaculty_id())) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Faculty> updateFaculty(@PathVariable Long id, @RequestBody Faculty faculty) {
+        Faculty existingFaculty = facultyService.getFacultyById(id).orElse(null);
+        if (existingFaculty != null) {
+            existingFaculty.setName(faculty.getName());
+            existingFaculty.setDepartment(faculty.getName());
+            return new ResponseEntity<>(facultyService.updateFaculty(existingFaculty), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Faculty updatedFaculty = facultyService.saveFaculty(faculty);
-        return ResponseEntity.ok(updatedFaculty);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFaculty(@PathVariable String id) {
-        facultyService.deleteFaculty(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<HttpStatus> deleteFaculty(@PathVariable Long id) {
+        try {
+            facultyService.deleteFaculty(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
