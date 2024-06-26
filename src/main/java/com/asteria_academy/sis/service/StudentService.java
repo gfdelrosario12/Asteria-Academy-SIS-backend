@@ -2,6 +2,7 @@ package com.asteria_academy.sis.service;
 
 import com.asteria_academy.sis.entity.Student;
 import com.asteria_academy.sis.repository.StudentRepository;
+import com.asteria_academy.sis.security.algorithm.PasswordArgon2SpringSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,18 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    private final PasswordArgon2SpringSecurity passwordEncoder = new PasswordArgon2SpringSecurity();
+
+    public boolean login(String email, String rawPassword) {
+        Student student = studentRepository.findByEmail(email);
+        if (student != null) {
+            String salt = student.getSalt();
+            String hash = student.getPassword();
+            return passwordEncoder.matchPasswords(salt, rawPassword, hash);
+        }
+        return false;
+    }
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();

@@ -11,7 +11,7 @@ public class Administrator {
     private Long id;
 
     private String email;
-    private String hash;
+    private String password;
     private String salt;
     private String full_name;
     private String address;
@@ -35,12 +35,12 @@ public class Administrator {
         this.email = email;
     }
 
-    public String getHash() {
-        return hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setPassword(String hash) {
+        this.password = hash;
     }
 
     public String getSalt() {

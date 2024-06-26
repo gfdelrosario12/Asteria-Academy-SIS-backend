@@ -1,6 +1,8 @@
 package com.asteria_academy.sis.controller;
 
 import com.asteria_academy.sis.entity.Administrator;
+import com.asteria_academy.sis.entity.LogIn;
+import com.asteria_academy.sis.security.algorithm.PasswordArgon2SpringSecurity;
 import com.asteria_academy.sis.service.AdministratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,24 @@ public class AdministratorController {
 
     @PostMapping("/")
     public ResponseEntity<Administrator> createAdministrator(@RequestBody Administrator administrator) {
+        PasswordArgon2SpringSecurity passwordSecurity = new PasswordArgon2SpringSecurity();
+        String salt = passwordSecurity.generateSalt();
+        String hashedPassword = passwordSecurity.encryptPassword(administrator.getPassword(), salt); // Assuming the raw password is in the 'hash' field
+
+        administrator.setSalt(salt);
+        administrator.setPassword(hashedPassword);
+
         return new ResponseEntity<>(administratorService.saveAdministrator(administrator), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody LogIn loginRequest) {
+        boolean isAuthenticated = administratorService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (isAuthenticated) {
+            return "Login successful";
+        } else {
+            return "Invalid email or password";
+        }
     }
 
     @PutMapping("/{id}")
@@ -36,7 +55,7 @@ public class AdministratorController {
         Administrator existingAdministrator = administratorService.getAdministratorById(id).orElse(null);
         if (existingAdministrator != null) {
             existingAdministrator.setEmail(administrator.getEmail());
-            existingAdministrator.setHash(administrator.getHash());
+            existingAdministrator.setPassword(administrator.getPassword());
             existingAdministrator.setSalt(administrator.getSalt());
             existingAdministrator.setFull_name(administrator.getFull_name());
             existingAdministrator.setAddress(administrator.getAddress());

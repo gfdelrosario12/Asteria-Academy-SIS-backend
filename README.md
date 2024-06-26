@@ -74,3 +74,15 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - None so far, stable version
     - Notes:
         - Need to add further functionalities
+
+### June 27; 12:32 AM
+- Commit Message: Implemented Password Hashing and Log In
+- Background: Implemented Password Hashing and Log In
+- Status:
+    - Updates:
+        - Implemented password hashing through Argon2
+        - Implemented log in for faculty, students and admin users
+    - Issues:
+        - Stable tested version
+    - Notes:
+        - Not yet connected with session

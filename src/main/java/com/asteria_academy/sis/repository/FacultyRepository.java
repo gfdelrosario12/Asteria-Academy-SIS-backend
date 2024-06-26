@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
-    // Custom queries if needed
+    Faculty findByEmail(String email);
 }
-

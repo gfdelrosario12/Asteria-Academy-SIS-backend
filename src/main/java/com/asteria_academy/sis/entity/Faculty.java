@@ -1,7 +1,6 @@
 package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "faculty")
@@ -11,12 +10,19 @@ public class Faculty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    private String email;
+    private String password;
+    private String salt;
+    private String full_name;
+    private String address;
+    private char gender;
+    private int mobile_number;
+    private String role;
 
     @Column(nullable = false)
     private String department;
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -25,12 +31,68 @@ public class Faculty {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getFull_name() {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public char getGender() {
+        return gender;
+    }
+
+    public void setGender(char gender) {
+        this.gender = gender;
+    }
+
+    public int getMobile_number() {
+        return mobile_number;
+    }
+
+    public void setMobile_number(int mobile_number) {
+        this.mobile_number = mobile_number;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getDepartment() {
@@ -41,4 +103,3 @@ public class Faculty {
         this.department = department;
     }
 }
-

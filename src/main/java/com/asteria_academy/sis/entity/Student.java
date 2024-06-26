@@ -1,7 +1,6 @@
 package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "student")
@@ -10,8 +9,9 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String email;
-    private String hash;
+    private String password;
     private String salt;
     private String full_name;
     private String address;
@@ -19,6 +19,7 @@ public class Student {
     private int mobile_number;
     private String role;
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -35,12 +36,12 @@ public class Student {
         this.email = email;
     }
 
-    public String getHash() {
-        return hash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSalt() {
