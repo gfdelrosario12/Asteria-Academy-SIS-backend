@@ -86,3 +86,16 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Stable tested version
     - Notes:
         - Not yet connected with session
+
+### June 27; 10:21 PM
+- Commit Message: Implemented tree structure for grades and classes
+- Background: Implemented tree structure for grades and classes
+- Status:
+    - Updates:
+        - Created tree structure retrieving method with school year, year level, semester for classes of faculty
+        - ICreated tree structure retrieving method with school year and semester for grades of student
+        - Converted controllers using request param to path variable.
+    - Issues:
+        - Not yet tested
+    - Notes:
+        - Not yet connected with frontend

@@ -30,7 +30,23 @@ public class ClassSubjectService {
         return classSubjectRepository.save(classSubject);
     }
 
+    public List<Integer> getDistinctSchoolYearsByFacultyId(Long facultyId) {
+        return classSubjectRepository.findDistinctSchoolYearsByFacultyId(facultyId);
+    }
     public void deleteClassSubject(Long id) {
         classSubjectRepository.deleteById(id);
     }
+
+    public List<Integer> getDistinctYearLevelsByFacultyIdAndSchoolYear(Long facultyId, int schoolYear) {
+        return classSubjectRepository.findDistinctYearLevelsByFacultyIdAndSchoolYear(facultyId, schoolYear);
+    }
+
+    public List<Integer> getDistinctSemestersByFacultyIdAndSchoolYearAndYearLevel(Long facultyId, int schoolYear, int yearLevel) {
+        return classSubjectRepository.findDistinctSemestersByFacultyIdAndSchoolYearAndYearLevel(facultyId, schoolYear, yearLevel);
+    }
+
+    public List<Long> getIdsByFacultyIdAndSchoolYearAndYearLevelAndSemester(Long facultyId, int schoolYear, int yearLevel, int semester) {
+        return classSubjectRepository.findIdsByFacultyIdAndSchoolYearAndYearLevelAndSemester(facultyId, schoolYear, yearLevel, semester);
+    }
+
 }

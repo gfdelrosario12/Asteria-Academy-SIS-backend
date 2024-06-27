@@ -33,4 +33,16 @@ public class GradeService {
     public void deleteGrade(Long id) {
         gradeRepository.deleteById(id);
     }
+
+    public List<Integer> getDistinctSchoolYears() {
+        return gradeRepository.findDistinctSchoolYears();
+    }
+
+    public List<Integer> getDistinctSemestersBySchoolYear(int schoolYear) {
+        return gradeRepository.findDistinctSemestersBySchoolYear(schoolYear);
+    }
+
+    public List<Long> getIdsBySchoolYearAndSemester(int schoolYear, int semester) {
+        return gradeRepository.findIdsBySchoolYearAndSemester(schoolYear, semester);
+    }
 }

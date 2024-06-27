@@ -36,6 +36,9 @@ public class AdministratorController {
 
         administrator.setSalt(salt);
         administrator.setPassword(hashedPassword);
+        Long lastID = administratorService.getLastInsertedId();
+        String username = administratorService.username(lastID);
+        administrator.setUsername(username);
 
         return new ResponseEntity<>(administratorService.saveAdministrator(administrator), HttpStatus.CREATED);
     }

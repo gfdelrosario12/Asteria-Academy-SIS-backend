@@ -46,6 +46,9 @@ public class FacultyController {
 
         faculty.setPassword(hashedPassword);
         faculty.setSalt(salt);
+        Long lastID = facultyService.getLastInsertedId();
+        String username = facultyService.username(lastID);
+        faculty.setUsername(username);
 
         return new ResponseEntity<>(facultyService.saveFaculty(faculty), HttpStatus.CREATED);
     }

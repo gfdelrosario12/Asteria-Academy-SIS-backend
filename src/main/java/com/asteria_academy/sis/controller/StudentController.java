@@ -38,6 +38,9 @@ public class StudentController {
 
         student.setPassword(hashedPassword);
         student.setSalt(salt);
+        Long lastID = studentService.getLastInsertedId();
+        String username = studentService.username(lastID);
+        student.setUsername(username);
 
         return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
     }

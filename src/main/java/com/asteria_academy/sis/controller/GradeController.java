@@ -23,6 +23,20 @@ public class GradeController {
     public Grade getGradeById(@PathVariable Long id) {
         return gradeService.getGradeById(id).orElse(null);
     }
+    @GetMapping("/distinct-school-years")
+    public List<Integer> getDistinctSchoolYears() {
+        return gradeService.getDistinctSchoolYears();
+    }
+
+    @GetMapping("/distinct-school-years/{schoolYear}/semesters")
+    public List<Integer> getDistinctSemestersBySchoolYear(@PathVariable int schoolYear) {
+        return gradeService.getDistinctSemestersBySchoolYear(schoolYear);
+    }
+
+    @GetMapping("/school-years/{schoolYear}/semesters/{semester}/ids")
+    public List<Long> getIdsBySchoolYearAndSemester(@PathVariable int schoolYear, @PathVariable int semester) {
+        return gradeService.getIdsBySchoolYearAndSemester(schoolYear, semester);
+    }
 
     @PostMapping("/")
     public Grade createGrade(@RequestBody Grade grade) {
@@ -30,7 +44,7 @@ public class GradeController {
     }
 
     @PutMapping("/{id}")
-public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
+    public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
         Grade existingGrade = gradeService.getGradeById(id).orElse(null);
         if (existingGrade != null) {
             existingGrade.setGrade(grade.getGrade());

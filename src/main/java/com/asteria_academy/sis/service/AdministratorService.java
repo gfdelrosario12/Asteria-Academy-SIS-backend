@@ -4,6 +4,7 @@ import com.asteria_academy.sis.entity.Administrator;
 import com.asteria_academy.sis.repository.AdministratorRepository;
 import com.asteria_academy.sis.security.algorithm.PasswordArgon2SpringSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,23 @@ public class AdministratorService {
             return passwordEncoder.matchPasswords(salt, rawPassword, hash);
         }
         return false;
+    }
+
+    public Long getLastInsertedId() {
+        // Assuming your id field is Long and auto-generated
+        // You can fetch the last inserted id by sorting in descending order
+        List<Administrator> entities = administratorRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
+        if (!entities.isEmpty()) {
+            return entities.get(0).getId();
+        } else {
+            return null; // or handle accordingly if no entities are found
+        }
+    }
+
+    public String username(Long lastID) {
+        String role = "Administrator";
+        return "AA " + role + " " + lastID;
     }
 
     public List<Administrator> getAllAdministrators() {

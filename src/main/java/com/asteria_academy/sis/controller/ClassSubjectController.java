@@ -26,6 +26,26 @@ public class ClassSubjectController {
         return new ResponseEntity<>(classSubjectService.getClassSubjectById(id).orElse(null), HttpStatus.OK);
     }
 
+    @GetMapping("/distinct-school-years-by-faculty/{facultyId}")
+    public List<Integer> getDistinctSchoolYearsByFacultyId(@PathVariable Long facultyId) {
+        return classSubjectService.getDistinctSchoolYearsByFacultyId(facultyId);
+    }
+
+    @GetMapping("/distinct-year-levels-by-faculty-and-school-year/{facultyId}/{schoolYear}")
+    public List<Integer> getDistinctYearLevelsByFacultyIdAndSchoolYear(@PathVariable Long facultyId, @PathVariable int schoolYear) {
+        return classSubjectService.getDistinctYearLevelsByFacultyIdAndSchoolYear(facultyId, schoolYear);
+    }
+
+    @GetMapping("/distinct-semesters-by-faculty-and-school-year-and-year-level/{facultyId}/{schoolYear}/{yearLevel}")
+    public List<Integer> getDistinctSemestersByFacultyIdAndSchoolYearAndYearLevel(@PathVariable Long facultyId, @PathVariable int schoolYear, @PathVariable int yearLevel) {
+        return classSubjectService.getDistinctSemestersByFacultyIdAndSchoolYearAndYearLevel(facultyId, schoolYear, yearLevel);
+    }
+
+    @GetMapping("/ids-by-faculty-and-school-year-and-year-level-and-semester/{facultyId}/{schoolYear}/{yearLevel}/{semester}")
+    public List<Long> getIdsByFacultyIdAndSchoolYearAndYearLevelAndSemester(@PathVariable Long facultyId, @PathVariable int schoolYear, @PathVariable int yearLevel, @PathVariable int semester) {
+        return classSubjectService.getIdsByFacultyIdAndSchoolYearAndYearLevelAndSemester(facultyId, schoolYear, yearLevel, semester);
+    }
+
     @PostMapping("/")
     public ResponseEntity<Class_Subject> createClassSubject(@RequestBody Class_Subject classSubject) {
         return new ResponseEntity<>(classSubjectService.saveClassSubject(classSubject), HttpStatus.CREATED);
