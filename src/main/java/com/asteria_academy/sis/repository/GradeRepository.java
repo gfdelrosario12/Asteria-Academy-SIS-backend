@@ -10,12 +10,12 @@ import java.util.List;
 
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Long> {
-    @Query("SELECT DISTINCT g.school_year FROM Grade g ORDER BY g.school_year")
-    List<Integer> findDistinctSchoolYears();
+    @Query("SELECT DISTINCT g.school_year FROM Grade g WHERE g.student.id = :studentId ORDER BY g.school_year")
+    List<Integer> findDistinctSchoolYearsByStudentId(@Param("studentId") Long studentId);
 
-    @Query("SELECT DISTINCT g.semester FROM Grade g WHERE g.school_year = :schoolYear ORDER BY g.semester")
-    List<Integer> findDistinctSemestersBySchoolYear(@Param("schoolYear") int schoolYear);
+    @Query("SELECT DISTINCT g.semester FROM Grade g WHERE g.student.id = :studentId AND g.school_year = :schoolYear ORDER BY g.semester")
+    List<Integer> findDistinctSemestersByStudentIdAndSchoolYear(@Param("studentId") Long studentId, @Param("schoolYear") int schoolYear);
 
-    @Query("SELECT g.id FROM Grade g WHERE g.school_year = :schoolYear AND g.semester = :semester")
-    List<Long> findIdsBySchoolYearAndSemester(@Param("schoolYear") int schoolYear, @Param("semester") int semester);
+    @Query("SELECT g.id FROM Grade g WHERE g.student.id = :studentId AND g.school_year = :schoolYear AND g.semester = :semester")
+    List<Long> findIdsByStudentIdAndSchoolYearAndSemester(@Param("studentId") Long studentId, @Param("schoolYear") int schoolYear, @Param("semester") int semester);
 }

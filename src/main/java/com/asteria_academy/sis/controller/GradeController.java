@@ -23,19 +23,19 @@ public class GradeController {
     public Grade getGradeById(@PathVariable Long id) {
         return gradeService.getGradeById(id).orElse(null);
     }
-    @GetMapping("/distinct-school-years")
-    public List<Integer> getDistinctSchoolYears() {
-        return gradeService.getDistinctSchoolYears();
+    @GetMapping("/distinct-school-years/{studentId}")
+    public List<Integer> getDistinctSchoolYearsByStudentId(@PathVariable Long studentId) {
+        return gradeService.getDistinctSchoolYearsByStudentId(studentId);
     }
 
-    @GetMapping("/distinct-school-years/{schoolYear}/semesters")
-    public List<Integer> getDistinctSemestersBySchoolYear(@PathVariable int schoolYear) {
-        return gradeService.getDistinctSemestersBySchoolYear(schoolYear);
+    @GetMapping("/distinct-school-years/{studentId}/{schoolYear}/semesters")
+    public List<Integer> getDistinctSemestersByStudentIdAndSchoolYear(@PathVariable Long studentId, @PathVariable int schoolYear) {
+        return gradeService.getDistinctSemestersByStudentIdAndSchoolYear(studentId, schoolYear);
     }
 
-    @GetMapping("/school-years/{schoolYear}/semesters/{semester}/ids")
-    public List<Long> getIdsBySchoolYearAndSemester(@PathVariable int schoolYear, @PathVariable int semester) {
-        return gradeService.getIdsBySchoolYearAndSemester(schoolYear, semester);
+    @GetMapping("/{studentId}/school-years/{schoolYear}/semesters/{semester}/ids")
+    public List<Long> getIdsByStudentIdAndSchoolYearAndSemester(@PathVariable Long studentId, @PathVariable int schoolYear, @PathVariable int semester) {
+        return gradeService.getIdsByStudentIdAndSchoolYearAndSemester(studentId, schoolYear, semester);
     }
 
     @PostMapping("/")

@@ -34,15 +34,15 @@ public class GradeService {
         gradeRepository.deleteById(id);
     }
 
-    public List<Integer> getDistinctSchoolYears() {
-        return gradeRepository.findDistinctSchoolYears();
+    public List<Integer> getDistinctSchoolYearsByStudentId(Long studentId) {
+        return gradeRepository.findDistinctSchoolYearsByStudentId(studentId);
     }
 
-    public List<Integer> getDistinctSemestersBySchoolYear(int schoolYear) {
-        return gradeRepository.findDistinctSemestersBySchoolYear(schoolYear);
+    public List<Integer> getDistinctSemestersByStudentIdAndSchoolYear(Long studentId, int schoolYear) {
+        return gradeRepository.findDistinctSemestersByStudentIdAndSchoolYear(studentId, schoolYear);
     }
 
-    public List<Long> getIdsBySchoolYearAndSemester(int schoolYear, int semester) {
-        return gradeRepository.findIdsBySchoolYearAndSemester(schoolYear, semester);
+    public List<Long> getIdsByStudentIdAndSchoolYearAndSemester(Long studentId, int schoolYear, int semester) {
+        return gradeRepository.findIdsByStudentIdAndSchoolYearAndSemester(studentId, schoolYear, semester);
     }
 }

@@ -99,3 +99,14 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Not yet tested
     - Notes:
         - Not yet connected with frontend
+
+### June 27; 10:48 PM
+- Commit Message: Grade Entity Fixes
+- Background: Fixed grade retrieval to base on student id
+- Status:
+    - Updates:
+        - Updated grade levels to base on the student id
+    - Issues:
+        - Not yet tested
+    - Notes:
+        - Not yet connected with frontend
