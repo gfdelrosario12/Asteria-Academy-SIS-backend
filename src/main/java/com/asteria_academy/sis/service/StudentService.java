@@ -18,8 +18,8 @@ public class StudentService {
 
     private final PasswordArgon2SpringSecurity passwordEncoder = new PasswordArgon2SpringSecurity();
 
-    public boolean login(String email, String rawPassword) {
-        Student student = studentRepository.findByEmail(email);
+    public boolean login(String username, String rawPassword) {
+        Student student = studentRepository.findByUsername(username);
         if (student != null) {
             String salt = student.getSalt();
             String hash = student.getPassword();
@@ -36,13 +36,13 @@ public class StudentService {
         if (!entities.isEmpty()) {
             return entities.get(0).getId();
         } else {
-            return null; // or handle accordingly if no entities are found
+            return 0L; // or handle accordingly if no entities are found
         }
     }
 
     public String username(Long lastID) {
-        String role = "Administrator";
-        return "AA " + role + " " + lastID;
+        String role = "STUDENT";
+        return "AA-" + role + "-" + lastID;
     }
 
     public List<Student> getAllStudents() {

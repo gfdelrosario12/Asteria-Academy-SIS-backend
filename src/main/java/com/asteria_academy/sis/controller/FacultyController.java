@@ -25,7 +25,7 @@ public class FacultyController {
 
     @PostMapping("/login")
     public String login(@RequestBody LogIn loginRequest) {
-        boolean isAuthenticated = facultyService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        boolean isAuthenticated = facultyService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (isAuthenticated) {
             return "Login successful";
         } else {

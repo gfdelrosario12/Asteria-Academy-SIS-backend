@@ -110,3 +110,15 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Not yet tested
     - Notes:
         - Not yet connected with frontend
+
+### June 29; 3:11 AM
+- Commit Message: Tested endpoints
+- Background: Tested endpoints to find errors
+- Status:
+    - Updates:
+        - Tested post endpoints for user creation to know if username creation works
+        - Test post endpoints for user log in to know if username credential works
+    - Issues:
+        - Further endpoints not yet tested
+    - Notes:
+        - Continue testing

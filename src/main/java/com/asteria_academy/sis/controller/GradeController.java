@@ -47,15 +47,20 @@ public class GradeController {
     public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
         Grade existingGrade = gradeService.getGradeById(id).orElse(null);
         if (existingGrade != null) {
-            existingGrade.setGrade(grade.getGrade());
             existingGrade.setStudent(grade.getStudent());
             existingGrade.setClassSubjectObj(grade.getClassSubjectObj());
+            existingGrade.setSchool_year(grade.getSchool_year());
+            existingGrade.setYear_level(grade.getYear_level());
+            existingGrade.setSemester(grade.getSemester());
+            existingGrade.setProgram(grade.getProgram());
+            existingGrade.setBlock(grade.getBlock());
             existingGrade.setGrade(grade.getGrade());
             return gradeService.updateGrade(existingGrade);
         } else {
             return null;
         }
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteGrade(@PathVariable Long id) {

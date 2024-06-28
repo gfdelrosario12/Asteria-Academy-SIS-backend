@@ -18,8 +18,8 @@ public class AdministratorService {
 
     private PasswordArgon2SpringSecurity passwordEncoder = new PasswordArgon2SpringSecurity();
 
-    public boolean login(String email, String rawPassword) {
-        Administrator admin = administratorRepository.findByEmail(email);
+    public boolean login(String username, String rawPassword) {
+        Administrator admin = administratorRepository.findByUsername(username);
         if (admin != null) {
             String salt = admin.getSalt();
             String hash = admin.getPassword();
@@ -36,13 +36,13 @@ public class AdministratorService {
         if (!entities.isEmpty()) {
             return entities.get(0).getId();
         } else {
-            return null; // or handle accordingly if no entities are found
+            return 0L;
         }
     }
 
     public String username(Long lastID) {
-        String role = "Administrator";
-        return "AA " + role + " " + lastID;
+        String role = "ADMINISTRATOR";
+        return "AA-" + role + "-" + lastID;
     }
 
     public List<Administrator> getAllAdministrators() {

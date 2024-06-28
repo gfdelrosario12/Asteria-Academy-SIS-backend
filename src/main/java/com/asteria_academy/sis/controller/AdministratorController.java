@@ -45,7 +45,7 @@ public class AdministratorController {
 
     @PostMapping("/login")
     public String login(@RequestBody LogIn loginRequest) {
-        boolean isAuthenticated = administratorService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        boolean isAuthenticated = administratorService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (isAuthenticated) {
             return "Login successful";
         } else {

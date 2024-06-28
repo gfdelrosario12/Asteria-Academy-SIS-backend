@@ -47,7 +47,7 @@ public class StudentController {
 
     @PostMapping("/login")
     public String login(@RequestBody LogIn loginRequest) {
-        boolean isAuthenticated = studentService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        boolean isAuthenticated = studentService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (isAuthenticated) {
             return "Login successful";
         } else {
