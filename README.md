@@ -122,3 +122,15 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Further endpoints not yet tested
     - Notes:
         - Continue testing
+      
+### July 24; 3:27 AM
+- Commit Message: Implemented class_subject searching based on faculty id
+- Background: Implemented class_subject searching based on faculty id
+- Status:
+    - Updates:
+        - Created method to retrieve class_subjects based on faculty id
+        - Test get endpoints for class_subjects
+    - Issues:
+        - None
+    - Notes:
+        - Continue testing

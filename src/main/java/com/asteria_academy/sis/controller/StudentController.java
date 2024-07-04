@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
+@CrossOrigin(origins = "http://localhost:5173")
 public class StudentController {
 
     @Autowired
@@ -31,8 +32,6 @@ public class StudentController {
 
     @PostMapping("/")
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        // Assuming the password hashing and salting process should be handled before saving
-        PasswordArgon2SpringSecurity passwordSecurity = new PasswordArgon2SpringSecurity();
         String salt = PasswordArgon2SpringSecurity.generateSalt();
         String hashedPassword = PasswordArgon2SpringSecurity.encryptPassword(student.getPassword(), salt);
 
