@@ -34,9 +34,9 @@ public class AdministratorService {
         List<Administrator> entities = administratorRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
         if (!entities.isEmpty()) {
-            return entities.get(0).getId();
+            return entities.get(0).getId() + 1;
         } else {
-            return 0L;
+            return 1L;
         }
     }
 

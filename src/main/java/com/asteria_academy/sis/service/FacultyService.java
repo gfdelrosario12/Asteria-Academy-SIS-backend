@@ -37,7 +37,7 @@ public class FacultyService {
         if (!entities.isEmpty()) {
             return entities.get(0).getId();
         } else {
-            return 0L;
+            return 1L;
         }
     }
 

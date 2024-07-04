@@ -36,7 +36,7 @@ public class StudentService {
         if (!entities.isEmpty()) {
             return entities.get(0).getId();
         } else {
-            return 0L; // or handle accordingly if no entities are found
+            return 1L; // or handle accordingly if no entities are found
         }
     }
 
