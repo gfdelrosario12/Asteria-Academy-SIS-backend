@@ -16,7 +16,7 @@ public class Grade {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private Class_Subject classSubjectObj;
+    private ClassSubject classSubjectObj;
 
     private int school_year;
     private int year_level;
@@ -43,11 +43,11 @@ public class Grade {
         this.student = student;
     }
 
-    public Class_Subject getClassSubjectObj() {
+    public ClassSubject getClassSubjectObj() {
         return classSubjectObj;
     }
 
-    public void setClassSubjectObj(Class_Subject classSubjectObj) {
+    public void setClassSubjectObj(ClassSubject classSubjectObj) {
         this.classSubjectObj = classSubjectObj;
     }
 

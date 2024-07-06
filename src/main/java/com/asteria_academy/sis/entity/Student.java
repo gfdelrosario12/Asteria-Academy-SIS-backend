@@ -2,6 +2,11 @@ package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @Table(name = "student")
 public class Student {
@@ -19,7 +24,18 @@ public class Student {
     private int mobile_number;
     private String role;
 
-    // Getters and setters
+    public List<ClassSubject> getClassSubjects() {
+        return classSubjects;
+    }
+
+    public void setClassSubjects(List<ClassSubject> classSubjects) {
+        this.classSubjects = classSubjects;
+    }
+
+    @ManyToMany(mappedBy = "students")
+    private List<ClassSubject> classSubjects = new ArrayList<>();
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }

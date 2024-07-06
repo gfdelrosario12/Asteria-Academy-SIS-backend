@@ -1,10 +1,14 @@
 package com.asteria_academy.sis.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "class_subject")
-public class Class_Subject {
+public class ClassSubject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,8 +16,9 @@ public class Class_Subject {
 
     @Column(nullable = false)
     private String className;
-    private int school_year;
-    private int year_level;
+
+    private int schoolYear;
+    private int yearLevel;
     private int semester;
     private String program;
     private int block;
@@ -21,6 +26,22 @@ public class Class_Subject {
     @ManyToOne
     @JoinColumn(name = "faculty_id", nullable = false)
     private Faculty faculty;
+
+    @ManyToMany
+    @JoinTable(
+            name = "class_subject_students",
+            joinColumns = @JoinColumn(name = "class_subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private List<Student> students = new ArrayList<>();
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
 
     public Long getId() {
         return id;
@@ -38,20 +59,20 @@ public class Class_Subject {
         this.className = className;
     }
 
-    public int getSchool_year() {
-        return school_year;
+    public int getSchoolYear() {
+        return schoolYear;
     }
 
-    public void setSchool_year(int school_year) {
-        this.school_year = school_year;
+    public void setSchoolYear(int schoolYear) {
+        this.schoolYear = schoolYear;
     }
 
-    public int getYear_level() {
-        return year_level;
+    public int getYearLevel() {
+        return yearLevel;
     }
 
-    public void setYear_level(int year_level) {
-        this.year_level = year_level;
+    public void setYearLevel(int yearLevel) {
+        this.yearLevel = yearLevel;
     }
 
     public int getSemester() {

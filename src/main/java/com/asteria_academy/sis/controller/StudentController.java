@@ -1,5 +1,6 @@
 package com.asteria_academy.sis.controller;
 
+import com.asteria_academy.sis.entity.ClassSubject;
 import com.asteria_academy.sis.entity.LogIn;
 import com.asteria_academy.sis.entity.Student;
 import com.asteria_academy.sis.security.algorithm.PasswordArgon2SpringSecurity;
@@ -66,6 +67,7 @@ public class StudentController {
             existingStudent.setGender(student.getGender());
             existingStudent.setMobile_number(student.getMobile_number());
             existingStudent.setRole(student.getRole());
+            existingStudent.setClassSubjects(student.getClassSubjects());
             return new ResponseEntity<>(studentService.updateStudent(existingStudent), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,5 +78,14 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/studentsinclass/{classSubjectId}")
+    public ResponseEntity<List<Student>> getStudentsByClassSubjectId(@PathVariable("classSubjectId") Long classSubjectId) {
+        List<Student> students = studentService.getStudentsByClassSubjectId(classSubjectId);
+        for (Student student : students) {
+            student.setClassSubjects(null); // or any other logic to exclude students
+        }
+        return ResponseEntity.ok(students);
     }
 }

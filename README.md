@@ -123,7 +123,7 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
     - Notes:
         - Continue testing
       
-### July 24; 3:27 AM
+### June 4; 3:27 AM
 - Commit Message: Implemented class_subject searching based on faculty id
 - Background: Implemented class_subject searching based on faculty id
 - Status:
@@ -132,5 +132,17 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Test get endpoints for class_subjects
     - Issues:
         - None
+    - Notes:
+        - Continue testing
+
+### July 7; 2:45 AM
+- Commit Message: Completed Endpoints to Access Students in a Class Relationship
+- Background: Established Many To Many Relationship for Students and Class Subject
+- Status:
+    - Updates:
+        - Edited Entity Classes of Student and ClassSubject to establish Many To Many Relationship
+        - Edited Controllers of Student and ClassSubject to not retrieve their columns so that frontend will not receive null.
+    - Issues:
+        - None so far
     - Notes:
         - Continue testing
