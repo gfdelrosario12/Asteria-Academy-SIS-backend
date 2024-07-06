@@ -1,6 +1,6 @@
 package com.asteria_academy.sis.controller;
 
-import com.asteria_academy.sis.entity.Class_Subject;
+import com.asteria_academy.sis.entity.ClassSubject;
 import com.asteria_academy.sis.service.ClassSubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/class-subjects")
 public class ClassSubjectController {
 
@@ -17,33 +18,41 @@ public class ClassSubjectController {
     private ClassSubjectService classSubjectService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Class_Subject>> getAllClassSubjects() {
-        return new ResponseEntity<>(classSubjectService.getAllClassSubjects(), HttpStatus.OK);
+    public ResponseEntity<List<ClassSubject>> getAllClassSubjects() {
+        List<ClassSubject> classSubjects = classSubjectService.getAllClassSubjects();
+        // Modify the response to exclude students if needed
+        for (ClassSubject classSubject : classSubjects) {
+            classSubject.setStudents(null); // or any other logic to exclude students
+        }
+        return new ResponseEntity<>(classSubjects, HttpStatus.OK);
     }
 
     @GetMapping("/faculty/{facultyId}/classes")
-    public ResponseEntity<List<Class_Subject>> getClassesByFacultyId(@PathVariable Long facultyId) {
-        List<Class_Subject> classes = classSubjectService.getClassesByFacultyId(facultyId);
+    public ResponseEntity<List<ClassSubject>> getClassesByFacultyId(@PathVariable Long facultyId) {
+        List<ClassSubject> classes = classSubjectService.getClassesByFacultyId(facultyId);
+        for (ClassSubject classSubject : classes) {
+            classSubject.setStudents(null); // or any other logic to exclude students
+        }
         return new ResponseEntity<>(classes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Class_Subject> getClassSubjectById(@PathVariable Long id) {
+    public ResponseEntity<ClassSubject> getClassSubjectById(@PathVariable Long id) {
         return new ResponseEntity<>(classSubjectService.getClassSubjectById(id).orElse(null), HttpStatus.OK);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Class_Subject> createClassSubject(@RequestBody Class_Subject classSubject) {
+    public ResponseEntity<ClassSubject> createClassSubject(@RequestBody ClassSubject classSubject) {
         return new ResponseEntity<>(classSubjectService.saveClassSubject(classSubject), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Class_Subject> updateClassSubject(@PathVariable Long id, @RequestBody Class_Subject classSubject) {
-        Class_Subject existingClassSubject = classSubjectService.getClassSubjectById(id).orElse(null);
+    public ResponseEntity<ClassSubject> updateClassSubject(@PathVariable Long id, @RequestBody ClassSubject classSubject) {
+        ClassSubject existingClassSubject = classSubjectService.getClassSubjectById(id).orElse(null);
         if (existingClassSubject != null) {
             existingClassSubject.setClassName(classSubject.getClassName());
-            existingClassSubject.setSchool_year(classSubject.getSchool_year());
-            existingClassSubject.setYear_level(classSubject.getYear_level());
+            existingClassSubject.setSchoolYear(classSubject.getSchoolYear());
+            existingClassSubject.setYearLevel(classSubject.getYearLevel());
             existingClassSubject.setSemester(classSubject.getSemester());
             existingClassSubject.setProgram(classSubject.getProgram());
             existingClassSubject.setBlock(classSubject.getBlock());
@@ -61,6 +70,42 @@ public class ClassSubjectController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{classSubjectId}/update-students")
+    public ResponseEntity<String> updateStudentsInClassSubject(
+            @PathVariable Long classSubjectId,
+            @RequestBody UpdateStudentsRequest request) {
+
+        Long[] studentsToAdd = request.getStudentsToAdd();
+        Long[] studentsToRemove = request.getStudentsToRemove();
+
+        classSubjectService.updateStudentsInClassSubject(classSubjectId, studentsToAdd, studentsToRemove);
+
+        return ResponseEntity.ok("Students updated in ClassSubject successfully");
+    }
+
+    // Inner class for request body mapping
+    static class UpdateStudentsRequest {
+        private Long[] studentsToAdd;
+        private Long[] studentsToRemove;
+
+        public Long[] getStudentsToAdd() {
+            return studentsToAdd;
+        }
+
+        public Long[] getStudentsToRemove() {
+            return studentsToRemove;
+        }
+
+
+        public void setStudentsToAdd(Long[] studentsToAdd) {
+            this.studentsToAdd = studentsToAdd;
+        }
+
+        public void setStudentsToRemove(Long[] studentsToRemove) {
+            this.studentsToRemove = studentsToRemove;
         }
     }
 }

@@ -35,7 +35,7 @@ public class FacultyService {
         List<Faculty> entities = facultyRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
         if (!entities.isEmpty()) {
-            return entities.get(0).getId();
+            return entities.get(0).getId() + 1;
         } else {
             return 1L;
         }

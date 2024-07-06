@@ -1,12 +1,15 @@
 package com.asteria_academy.sis.service;
 
+import com.asteria_academy.sis.entity.ClassSubject;
 import com.asteria_academy.sis.entity.Student;
+import com.asteria_academy.sis.repository.ClassSubjectRepository;
 import com.asteria_academy.sis.repository.StudentRepository;
 import com.asteria_academy.sis.security.algorithm.PasswordArgon2SpringSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,7 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
 
     private final PasswordArgon2SpringSecurity passwordEncoder = new PasswordArgon2SpringSecurity();
 
@@ -34,7 +38,7 @@ public class StudentService {
         List<Student> entities = studentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
         if (!entities.isEmpty()) {
-            return entities.get(0).getId();
+            return entities.get(0).getId() + 1;
         } else {
             return 1L; // or handle accordingly if no entities are found
         }
@@ -63,5 +67,9 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
+    }
+
+    public List<Student> getStudentsByClassSubjectId(Long classSubjectId) {
+        return studentRepository.findStudentsByClassSubjectId(classSubjectId);
     }
 }
