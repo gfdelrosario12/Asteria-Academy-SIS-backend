@@ -137,12 +137,23 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
 
 ### July 7; 2:45 AM
 - Commit Message: Completed Endpoints to Access Students in a Class Relationship
-- Background: Established Many To Many Relationship for Students and Class Subject
+- Background: Established Many-To-Many Relationship for Students and Class Subject
 - Status:
     - Updates:
         - Edited Entity Classes of Student and ClassSubject to establish Many To Many Relationship
         - Edited Controllers of Student and ClassSubject to not retrieve their columns so that frontend will not receive null.
     - Issues:
         - None so far
+    - Notes:
+        - Continue testing
+
+### July 7; 9:29 PM
+- Commit Message: Partially Completed Retrieval of Grades
+- Background: Completed grade interface for faculty side
+- Status:
+    - Updates:
+        - Improved, controller, service and repository for grades
+    - Issues:
+        - Continue testing to look for errors
     - Notes:
         - Continue testing
