@@ -1,11 +1,17 @@
 package com.asteria_academy.sis.controller;
 
 import com.asteria_academy.sis.entity.Grade;
+import com.asteria_academy.sis.entity.Student;
+import com.asteria_academy.sis.entity.ClassSubject;
 import com.asteria_academy.sis.service.GradeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/grades")
@@ -15,55 +21,85 @@ public class GradeController {
     private GradeService gradeService;
 
     @GetMapping("/")
-    public List<Grade> getAllGrades() {
-        return gradeService.getAllGrades();
+    public ResponseEntity<List<Grade>> getAllGrades() {
+        List<Grade> grades = gradeService.getAllGrades();
+        List<Grade> modifiedGrades = grades.stream().map(this::mapToModifiedGrade).collect(Collectors.toList());
+        return new ResponseEntity<>(modifiedGrades, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Grade getGradeById(@PathVariable Long id) {
-        return gradeService.getGradeById(id).orElse(null);
-    }
-    @GetMapping("/distinct-school-years/{studentId}")
-    public List<Integer> getDistinctSchoolYearsByStudentId(@PathVariable Long studentId) {
-        return gradeService.getDistinctSchoolYearsByStudentId(studentId);
-    }
-
-    @GetMapping("/distinct-school-years/{studentId}/{schoolYear}/semesters")
-    public List<Integer> getDistinctSemestersByStudentIdAndSchoolYear(@PathVariable Long studentId, @PathVariable int schoolYear) {
-        return gradeService.getDistinctSemestersByStudentIdAndSchoolYear(studentId, schoolYear);
-    }
-
-    @GetMapping("/{studentId}/school-years/{schoolYear}/semesters/{semester}/ids")
-    public List<Long> getIdsByStudentIdAndSchoolYearAndSemester(@PathVariable Long studentId, @PathVariable int schoolYear, @PathVariable int semester) {
-        return gradeService.getIdsByStudentIdAndSchoolYearAndSemester(studentId, schoolYear, semester);
+    public ResponseEntity<Grade> getGradeById(@PathVariable Long id) {
+        Optional<Grade> gradeOpt = gradeService.getGradeById(id);
+        return gradeOpt.map(grade -> new ResponseEntity<>(mapToModifiedGrade(grade), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/")
-    public Grade createGrade(@RequestBody Grade grade) {
-        return gradeService.saveGrade(grade);
+    public ResponseEntity<Grade> createGrade(@RequestBody Grade grade) {
+        Grade savedGrade = gradeService.saveGrade(grade);
+        return new ResponseEntity<>(mapToModifiedGrade(savedGrade), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
-        Grade existingGrade = gradeService.getGradeById(id).orElse(null);
-        if (existingGrade != null) {
-            existingGrade.setStudent(grade.getStudent());
-            existingGrade.setClassSubjectObj(grade.getClassSubjectObj());
-            existingGrade.setSchool_year(grade.getSchool_year());
-            existingGrade.setYear_level(grade.getYear_level());
-            existingGrade.setSemester(grade.getSemester());
-            existingGrade.setProgram(grade.getProgram());
-            existingGrade.setBlock(grade.getBlock());
-            existingGrade.setGrade(grade.getGrade());
-            return gradeService.updateGrade(existingGrade);
-        } else {
-            return null;
+    public ResponseEntity<Grade> updateGrade(@PathVariable Long id, @RequestBody Grade updatedGrade) {
+        Optional<Grade> existingGradeOpt = gradeService.getGradeById(id);
+        if (existingGradeOpt.isPresent()) {
+            Grade existingGrade = existingGradeOpt.get();
+            existingGrade.setGrade(updatedGrade.getGrade()); // Only update the grade field
+            Grade savedGrade = gradeService.updateGrade(existingGrade);
+            return new ResponseEntity<>(mapToModifiedGrade(savedGrade), HttpStatus.OK);
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
     @DeleteMapping("/{id}")
-    public void deleteGrade(@PathVariable Long id) {
-        gradeService.deleteGrade(id);
+    public ResponseEntity<Void> deleteGrade(@PathVariable Long id) {
+        Optional<Grade> gradeOpt = gradeService.getGradeById(id);
+        if (gradeOpt.isPresent()) {
+            gradeService.deleteGrade(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/student/{studentId}/class/{classId}")
+    public ResponseEntity<List<Grade>> getGradesByStudentIdAndClassId(@PathVariable Long studentId, @PathVariable Long classId) {
+        List<Grade> grades = gradeService.getGradesByStudentIdAndClassId(studentId, classId);
+        List<Grade> modifiedGrades = grades.stream().map(grade -> {
+            Grade g = new Grade();
+            g.setId(grade.getId());
+            Student student = new Student();
+            student.setId(grade.getStudent().getId());
+            g.setStudent(student);
+            ClassSubject classSubject = new ClassSubject();
+            classSubject.setId(grade.getClassSubjectObj().getId());
+            g.setClassSubjectObj(classSubject);
+            g.setSchool_year(grade.getSchool_year());
+            g.setYear_level(grade.getYear_level());
+            g.setSemester(grade.getSemester());
+            g.setProgram(grade.getProgram());
+            g.setBlock(grade.getBlock());
+            g.setGrade(grade.getGrade());
+            return g;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(modifiedGrades, HttpStatus.OK);
+    }
+
+    private Grade mapToModifiedGrade(Grade grade) {
+        Grade modifiedGrade = new Grade();
+        modifiedGrade.setId(grade.getId());
+        Student student = new Student();
+        student.setId(grade.getStudent().getId());
+        modifiedGrade.setStudent(student);
+        ClassSubject classSubject = new ClassSubject();
+        classSubject.setId(grade.getClassSubjectObj().getId());
+        modifiedGrade.setClassSubjectObj(classSubject);
+        modifiedGrade.setSchool_year(grade.getSchool_year());
+        modifiedGrade.setYear_level(grade.getYear_level());
+        modifiedGrade.setSemester(grade.getSemester());
+        modifiedGrade.setProgram(grade.getProgram());
+        modifiedGrade.setBlock(grade.getBlock());
+        modifiedGrade.setGrade(grade.getGrade());
+        return modifiedGrade;
     }
 }

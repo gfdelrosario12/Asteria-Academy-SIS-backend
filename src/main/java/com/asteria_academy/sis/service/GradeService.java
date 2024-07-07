@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class GradeService {
     @Autowired
@@ -34,15 +33,7 @@ public class GradeService {
         gradeRepository.deleteById(id);
     }
 
-    public List<Integer> getDistinctSchoolYearsByStudentId(Long studentId) {
-        return gradeRepository.findDistinctSchoolYearsByStudentId(studentId);
-    }
-
-    public List<Integer> getDistinctSemestersByStudentIdAndSchoolYear(Long studentId, int schoolYear) {
-        return gradeRepository.findDistinctSemestersByStudentIdAndSchoolYear(studentId, schoolYear);
-    }
-
-    public List<Long> getIdsByStudentIdAndSchoolYearAndSemester(Long studentId, int schoolYear, int semester) {
-        return gradeRepository.findIdsByStudentIdAndSchoolYearAndSemester(studentId, schoolYear, semester);
+    public List<Grade> getGradesByStudentIdAndClassId(Long studentId, Long classId) {
+        return gradeRepository.findByStudentIdAndClassId(studentId, classId);
     }
 }
