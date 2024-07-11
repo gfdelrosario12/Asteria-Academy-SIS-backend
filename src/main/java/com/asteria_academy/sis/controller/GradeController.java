@@ -74,11 +74,6 @@ public class GradeController {
             ClassSubject classSubject = new ClassSubject();
             classSubject.setId(grade.getClassSubjectObj().getId());
             g.setClassSubjectObj(classSubject);
-            g.setSchool_year(grade.getSchool_year());
-            g.setYear_level(grade.getYear_level());
-            g.setSemester(grade.getSemester());
-            g.setProgram(grade.getProgram());
-            g.setBlock(grade.getBlock());
             g.setGrade(grade.getGrade());
             return g;
         }).collect(Collectors.toList());
@@ -94,11 +89,6 @@ public class GradeController {
         ClassSubject classSubject = new ClassSubject();
         classSubject.setId(grade.getClassSubjectObj().getId());
         modifiedGrade.setClassSubjectObj(classSubject);
-        modifiedGrade.setSchool_year(grade.getSchool_year());
-        modifiedGrade.setYear_level(grade.getYear_level());
-        modifiedGrade.setSemester(grade.getSemester());
-        modifiedGrade.setProgram(grade.getProgram());
-        modifiedGrade.setBlock(grade.getBlock());
         modifiedGrade.setGrade(grade.getGrade());
         return modifiedGrade;
     }

@@ -22,8 +22,9 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("/")
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<List<Student>> getAllStudents() {
+        List<Student> students = studentService.getAllStudentsWithoutClassSubjects();
+        return ResponseEntity.ok(students);
     }
 
     @GetMapping("/{id}")
@@ -35,13 +36,11 @@ public class StudentController {
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
         String salt = PasswordArgon2SpringSecurity.generateSalt();
         String hashedPassword = PasswordArgon2SpringSecurity.encryptPassword(student.getPassword(), salt);
-
         student.setPassword(hashedPassword);
         student.setSalt(salt);
         Long lastID = studentService.getLastInsertedId();
         String username = studentService.username(lastID);
         student.setUsername(username);
-
         return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
     }
 

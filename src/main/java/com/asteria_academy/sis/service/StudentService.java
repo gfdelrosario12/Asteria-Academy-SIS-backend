@@ -19,18 +19,21 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-
     private final PasswordArgon2SpringSecurity passwordEncoder = new PasswordArgon2SpringSecurity();
 
     public boolean login(String username, String rawPassword) {
-        Student student = studentRepository.findByUsername(username);
-        if (student != null) {
+        List<Student> students = studentRepository.findAllByUsername(username);
+        if (students.size() == 1) {
+            Student student = students.get(0);
             String salt = student.getSalt();
             String hash = student.getPassword();
             return passwordEncoder.matchPasswords(salt, rawPassword, hash);
+        } else {
+            // Handle cases where no students or multiple students are found
+            return false;
         }
-        return false;
     }
+
 
     public Long getLastInsertedId() {
         // Assuming your id field is Long and auto-generated
@@ -67,6 +70,15 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
+    }
+
+    // Method to fetch students without their associated class subjects
+    public List<Student> getAllStudentsWithoutClassSubjects() {
+        List<Student> students = studentRepository.findAll();
+        for (Student student : students) {
+            student.setClassSubjects(null); // Set associated class subjects to null
+        }
+        return students;
     }
 
     public List<Student> getStudentsByClassSubjectId(Long classSubjectId) {

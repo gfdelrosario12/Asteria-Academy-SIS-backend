@@ -20,7 +20,6 @@ public class ClassSubjectController {
     @GetMapping("/")
     public ResponseEntity<List<ClassSubject>> getAllClassSubjects() {
         List<ClassSubject> classSubjects = classSubjectService.getAllClassSubjects();
-        // Modify the response to exclude students if needed
         for (ClassSubject classSubject : classSubjects) {
             classSubject.setStudents(null); // or any other logic to exclude students
         }
@@ -41,9 +40,19 @@ public class ClassSubjectController {
         return new ResponseEntity<>(classSubjectService.getClassSubjectById(id).orElse(null), HttpStatus.OK);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ClassSubject> createClassSubject(@RequestBody ClassSubject classSubject) {
-        return new ResponseEntity<>(classSubjectService.saveClassSubject(classSubject), HttpStatus.CREATED);
+    @GetMapping("/student/{studentId}/classes")
+    public ResponseEntity<List<ClassSubject>> getClassesByStudentId(@PathVariable Long studentId) {
+        List<ClassSubject> classes = classSubjectService.getClassesByStudentId(studentId);
+        for (ClassSubject classSubject : classes) {
+            classSubject.setStudents(null); // or any other logic to exclude students
+        }
+        return new ResponseEntity<>(classes, HttpStatus.OK);
+    }
+
+    @PostMapping("/{facultyId}")
+    public ResponseEntity<ClassSubject> createClassSubject(@RequestBody ClassSubject classSubject, @PathVariable Long facultyId) {
+        ClassSubject savedClassSubject = classSubjectService.saveClassSubject(classSubject, facultyId);
+        return new ResponseEntity<>(savedClassSubject, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -86,7 +95,6 @@ public class ClassSubjectController {
         return ResponseEntity.ok("Students updated in ClassSubject successfully");
     }
 
-    // Inner class for request body mapping
     static class UpdateStudentsRequest {
         private Long[] studentsToAdd;
         private Long[] studentsToRemove;
@@ -95,17 +103,40 @@ public class ClassSubjectController {
             return studentsToAdd;
         }
 
-        public Long[] getStudentsToRemove() {
-            return studentsToRemove;
-        }
-
-
         public void setStudentsToAdd(Long[] studentsToAdd) {
             this.studentsToAdd = studentsToAdd;
         }
 
+        public Long[] getStudentsToRemove() {
+            return studentsToRemove;
+        }
+
         public void setStudentsToRemove(Long[] studentsToRemove) {
             this.studentsToRemove = studentsToRemove;
+        }
+    }
+
+    @PutMapping("/{classSubjectId}/add-student/{studentId}")
+    public ResponseEntity<ClassSubject> addStudentToClassSubject(
+            @PathVariable Long classSubjectId,
+            @PathVariable Long studentId) {
+        try {
+            classSubjectService.addStudentToClassSubject(classSubjectId, studentId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{classSubjectId}/remove-student/{studentId}")
+    public ResponseEntity<ClassSubject> removeStudentFromClassSubject(
+            @PathVariable Long classSubjectId,
+            @PathVariable Long studentId) {
+        try {
+            classSubjectService.removeStudentFromClassSubject(classSubjectId, studentId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
