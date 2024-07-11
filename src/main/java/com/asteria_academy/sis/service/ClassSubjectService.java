@@ -1,13 +1,14 @@
 package com.asteria_academy.sis.service;
 
 import com.asteria_academy.sis.entity.ClassSubject;
+import com.asteria_academy.sis.entity.Faculty;
 import com.asteria_academy.sis.entity.Student;
 import com.asteria_academy.sis.repository.ClassSubjectRepository;
+import com.asteria_academy.sis.repository.FacultyRepository;
 import com.asteria_academy.sis.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,9 @@ public class ClassSubjectService {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private FacultyRepository facultyRepository;
+
     public List<ClassSubject> getAllClassSubjects() {
         return classSubjectRepository.findAll();
     }
@@ -28,8 +32,22 @@ public class ClassSubjectService {
         return classSubjectRepository.findById(id);
     }
 
-    public ClassSubject saveClassSubject(ClassSubject classSubject) {
-        return classSubjectRepository.save(classSubject);
+    public List<ClassSubject> getClassesByFacultyId(Long facultyId) {
+        return classSubjectRepository.findByFacultyId(facultyId);
+    }
+
+    public List<ClassSubject> getClassesByStudentId(Long studentId) {
+        return classSubjectRepository.findByStudentsId(studentId);
+    }
+
+    public ClassSubject saveClassSubject(ClassSubject classSubject, Long facultyId) {
+        Optional<Faculty> facultyOpt = facultyRepository.findById(facultyId);
+        if (facultyOpt.isPresent()) {
+            classSubject.setFaculty(facultyOpt.get());
+            return classSubjectRepository.save(classSubject);
+        } else {
+            throw new RuntimeException("Faculty not found");
+        }
     }
 
     public ClassSubject updateClassSubject(ClassSubject classSubject) {
@@ -40,30 +58,62 @@ public class ClassSubjectService {
         classSubjectRepository.deleteById(id);
     }
 
-    public List<ClassSubject> getClassesByFacultyId(Long facultyId) {
-        return classSubjectRepository.findByFaculty_Id(facultyId);
-    }
-
     public void updateStudentsInClassSubject(Long classSubjectId, Long[] studentsToAdd, Long[] studentsToRemove) {
-        // Fetch the ClassSubject entity by ID
-        ClassSubject classSubject = classSubjectRepository.findById(classSubjectId)
-                .orElseThrow(() -> new RuntimeException("ClassSubject not found with id: " + classSubjectId));
+        Optional<ClassSubject> classSubjectOpt = classSubjectRepository.findById(classSubjectId);
+        if (classSubjectOpt.isPresent()) {
+            ClassSubject classSubject = classSubjectOpt.get();
 
-        // Fetch all students to add
-        List<Student> studentsToAddList = studentRepository.findAllById(Arrays.asList(studentsToAdd));
+            // Remove students
+            if (studentsToRemove != null) {
+                for (Long studentId : studentsToRemove) {
+                    Optional<Student> studentOpt = studentRepository.findById(studentId);
+                    studentOpt.ifPresent(classSubject.getStudents()::remove);
+                }
+            }
 
-        // Fetch all students to remove
-        List<Student> studentsToRemoveList = studentRepository.findAllById(Arrays.asList(studentsToRemove));
+            // Add students
+            if (studentsToAdd != null) {
+                for (Long studentId : studentsToAdd) {
+                    Optional<Student> studentOpt = studentRepository.findById(studentId);
+                    studentOpt.ifPresent(classSubject.getStudents()::add);
+                }
+            }
 
-        // Remove students from the class
-        classSubject.getStudents().removeAll(studentsToRemoveList);
-
-        // Add students to the class
-        classSubject.getStudents().addAll(studentsToAddList);
-
-        // Save the updated ClassSubject entity
-        classSubjectRepository.save(classSubject);
+            classSubjectRepository.save(classSubject);
+        } else {
+            throw new RuntimeException("ClassSubject not found");
+        }
     }
 
+    public void addStudentToClassSubject(Long classSubjectId, Long studentId) {
+        Optional<ClassSubject> classSubjectOpt = classSubjectRepository.findById(classSubjectId);
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
 
+        if (classSubjectOpt.isPresent() && studentOpt.isPresent()) {
+            ClassSubject classSubject = classSubjectOpt.get();
+            Student student = studentOpt.get();
+
+            if (!classSubject.getStudents().contains(student)) {
+                classSubject.getStudents().add(student);
+                classSubjectRepository.save(classSubject);
+            }
+        } else {
+            throw new RuntimeException("ClassSubject or Student not found");
+        }
+    }
+
+    public void removeStudentFromClassSubject(Long classSubjectId, Long studentId) {
+        Optional<ClassSubject> classSubjectOpt = classSubjectRepository.findById(classSubjectId);
+        Optional<Student> studentOpt = studentRepository.findById(studentId);
+
+        if (classSubjectOpt.isPresent() && studentOpt.isPresent()) {
+            ClassSubject classSubject = classSubjectOpt.get();
+            Student student = studentOpt.get();
+
+            classSubject.getStudents().remove(student);
+            classSubjectRepository.save(classSubject);
+        } else {
+            throw new RuntimeException("ClassSubject or Student not found");
+        }
+    }
 }

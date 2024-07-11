@@ -157,3 +157,15 @@ Asteria Academy - SIS was based of from my current project [Asteria Academy](htt
         - Continue testing to look for errors
     - Notes:
         - Continue testing
+
+### July 12 2024; 1:45 AM
+- Commit Message: Completed grades interface
+- Background: Completed grades interface
+- Status:
+    - Updates:
+        - Updated class subjects controller, service and repository to manage student grades.
+        - Updated faculty controller, service and repository to manage student grades.
+    - Issues:
+        - Continue testing to look for errors
+    - Notes:
+      - Continue testing
